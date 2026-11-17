@@ -1,0 +1,147 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-display: 'Fraunces', ui-serif, Georgia, serif;
+  --font-sans: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+
+  --color-cocoa-950: #1c110c;
+  --color-cocoa-900: #2a1812;
+  --color-cocoa-800: #3d2419;
+  --color-cocoa-700: #5b3626;
+  --color-cocoa-500: #8a5a43;
+  --color-cream-50: #fdf9f3;
+  --color-cream-100: #f8f0e4;
+  --color-cream-200: #efe2cf;
+  --color-cream-300: #e3cfb3;
+  --color-caramel-400: #e09a4f;
+  --color-caramel-500: #cf7a32;
+  --color-caramel-600: #b35f22;
+  --color-terracotta-500: #c4452a;
+  --color-whatsapp: #25d366;
+  --color-whatsapp-dark: #128c7e;
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-cream-50 font-sans text-cocoa-900 antialiased;
+    overflow-x: hidden;
+  }
+  ::selection {
+    @apply bg-caramel-400/40;
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-caramel-500);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+}
+
+/* ——— Grano sutil para dar textura cálida ——— */
+.grain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.35;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .22 0 0 0 0 .15 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ——— Aparición al hacer scroll ——— */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.8s var(--ease-out-soft),
+    transform 0.8s var(--ease-out-soft);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@keyframes card-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+}
+
+/* ——— Barras del hero en abanico ——— */
+.hero-bar {
+  transform: translate(var(--tx), var(--ty)) rotate(var(--rot));
+  transition: transform 0.9s var(--ease-out-soft);
+  animation: bar-in 1.1s var(--ease-out-soft) both;
+  animation-delay: var(--delay, 0ms);
+}
+.hero-fan:hover .hero-bar {
+  transform: translate(calc(var(--tx) * 1.18), calc(var(--ty) - 6px)) rotate(calc(var(--rot) * 1.25));
+}
+@keyframes bar-in {
+  from {
+    opacity: 0;
+    transform: translate(0, 60px) rotate(0deg);
+  }
+}
+
+.float-soft {
+  animation: float-soft 6s ease-in-out infinite;
+}
+@keyframes float-soft {
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.wa-pulse::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: var(--color-whatsapp);
+  animation: wa-pulse 2.8s ease-out infinite;
+  z-index: -1;
+}
+@keyframes wa-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.45;
+  }
+  70%,
+  100% {
+    transform: scale(1.55);
+    opacity: 0;
+  }
+}
+
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
