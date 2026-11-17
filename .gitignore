@@ -3,3 +3,6 @@ dist
 .vercel
 *.log
 .DS_Store
+
+# Fotos originales (no se usan en la web)
+WhatsApp Image*
